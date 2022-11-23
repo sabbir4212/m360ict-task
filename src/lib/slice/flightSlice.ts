@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { IFlightState } from "../../utils/type/flightTypes";
 
 export const getFlights: any = createAsyncThunk("getFlightData", async () => {
   const res = await fetch(`https://api.spacexdata.com/v3/launches`, {

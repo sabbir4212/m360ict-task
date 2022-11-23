@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { flightType } from "../utils/type/flightTypes";
 import { getFlights } from "../lib/slice/flightSlice";
 import Loading from "../components/Loading";
+import Flight from "../components/Flight";
 
 const Main:any = () => {
     const dispatch = useDispatch();
-  // const [flights, setFlights] = useState<flightType[]>([])
+    const [searchedFlight, setSearchedFlight] = useState([])
   const flights = useSelector((state: any) => state.flights);
   const{flight, isLoading, error} = flights;
 
@@ -21,7 +21,8 @@ const Main:any = () => {
   }
   return (
     <div>
-      {/* {flights.map((flight:any) => <Flight key={flight.flight_number} flight = {flight}></Flight>)} */}
+      
+      {flight.map((flight:any) => <Flight key={flight.flight_number} flight = {flight}></Flight>)}
     </div>
   );
 };
