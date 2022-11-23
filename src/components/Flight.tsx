@@ -3,7 +3,7 @@ import React from "react";
 import { flightType } from "../utils/type/flightTypes";
 
 const Flight = ({ flight }: { flight: flightType }) => {
-  // console.log(flight)
+  console.log(flight)
   const {
     crew,
     details,
@@ -31,10 +31,18 @@ const Flight = ({ flight }: { flight: flightType }) => {
   } = flight;
   return (
     <div>
-      <Card style={{ width: 1200, margin:"0 auto" }}>
-    <p>{mission_name}</p>
-    <p>{launch_date_local}</p>
-  </Card>
+      {flight?(
+
+        <Card style={{ width: 1200, margin: "10px auto" }}>
+        <h2 style={{ margin: "0" }}>Mission name: {mission_name}</h2>
+        <h3>Rocket name: {rocket.rocket_name}</h3>
+        <p style={{ margin: "0" }}>Launch local date: {launch_date_local}</p>
+        <p>Launching status: {launch_success?"Launch successful":"Launch faidled"}</p>
+        <img style={{width:300}} src={links.mission_patch} alt="" />
+      </Card>
+        ):(
+          <h1 style={{textAlign:'center'}}>Sorry couldn't find Rocket by this name</h1>
+        )}
     </div>
   );
 };

@@ -10,10 +10,10 @@ export interface flightType {
   launch_success: Boolean;
   launch_window: Number | null;
   launch_year: String | Number | null;
-  links: {};
+  links: {}| any;
   mission_id: [];
   mission_name: String;
-  rocket: {};
+  rocket: {}|any;
   ships: [] | String | null;
   static_fire_date_unix: Number | null;
   static_fire_date_utc: String;
