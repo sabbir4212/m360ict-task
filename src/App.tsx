@@ -4,7 +4,7 @@ import Main from './pages/Main';
 
 function App() {
   return (
-    <div className="App">
+    <div style={{background:"#ddd"}}>
       <Main></Main>
     </div>
   );

@@ -4,11 +4,13 @@ import { getFlights } from "../lib/slice/flightSlice";
 import Loading from "../components/Loading";
 import Flight from "../components/Flight";
 import Search from "antd/es/input/Search";
-import { Space } from "antd";
+import { Col, Row, Select, Space } from "antd";
+import moment from "moment";
 
-const Main: any = () => {
+const Main: React.FC = () => {
   const dispatch = useDispatch();
   const [searched, setSearched] = useState([]);
+  const [filterd, setFilterd] = useState([])
   const flights = useSelector((state: any) => state.flights);
   const { flight, isLoading } = flights;
 
@@ -24,30 +26,90 @@ const Main: any = () => {
 
   const onSearch = (e: any): void => {
     console.log(e);
-    const nowDate = new Date();
-
+    const today = new Date();
+    
     const filtered = flight.filter((searchedFlight: any) =>
-      searchedFlight.rocket?.rocket_name.includes(e)
+    searchedFlight.rocket?.rocket_name.includes(e)
     );
     // const dateSorted = flight.filter((dateSort:any) => dateSort.launch_date_local.getTime() <= nowDate.getTime());
     setSearched(filtered);
+
   };
 
   return (
     <div>
-      <div style={{ margin: "20px auto", width: 1200 }}>
-        <Space direction="vertical">
-          <Search
-            placeholder="input search text"
-            allowClear
-            onSearch={onSearch}
-            style={{ width: 400 }}
-          />
-        </Space>
+      <div
+        className=""
+        style={{ margin: "0 auto", padding: "20px 0", width: 1200 }}
+      >
+        <Row justify="space-between">
+          <Col span={8}>
+            <Space direction="vertical">
+              <Search
+                placeholder="Search by rocket name"
+                allowClear
+                onSearch={onSearch}
+                style={{ width: 300 }}
+              />
+            </Space>
+          </Col>
+          <Col span={8}>
+            <Select
+              defaultValue="All"
+              style={{ width: 300 }}
+              allowClear
+              options={[
+                {
+                  value: "All",
+                  label: "All",
+                },
+                {
+                  value: "Last Week",
+                  label: "Last Week",
+                },
+                {
+                  value: "Last Month",
+                  label: "Last Month",
+                },
+                {
+                  value: "Last Year",
+                  label: "Last Year",
+                },
+              ]}
+            />
+          </Col>
+          <Col span={8}>
+            <Select
+              defaultValue="10"
+              style={{ width: 200 }}
+              allowClear
+              options={[
+                {
+                  value: "10",
+                  label: "10",
+                },
+                {
+                  value: "20",
+                  label: "20",
+                },
+                {
+                  value: "30",
+                  label: "30",
+                },
+                {
+                  value: "Full",
+                  label: "Full",
+                },
+              ]}
+            />
+          </Col>
+        </Row>
       </div>
-      {searched.map((flight: any) => (
-        <Flight key={flight.flight_number} flight={flight}></Flight>
-      ))}
+      <div style={{ display: "grid" }}>
+        {searched.map((flight: any) => (
+          <Flight key={flight.flight_number} flight={flight}></Flight>
+        ))}
+      </div>
     </div>
   );
 };
