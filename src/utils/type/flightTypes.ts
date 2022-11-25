@@ -1,7 +1,7 @@
 export interface flightType {
   crew: String | null;
   details: String | null;
-  flight_number: Number;
+  flight_number: Number|any;
   is_tentative: Boolean;
   launch_date_local: String;
   launch_date_unix: Number;

@@ -10,30 +10,32 @@ const Main: React.FC = () => {
   const dispatch = useDispatch();
   const [searched, setSearched] = useState([]);
   const [filterd, setFilterd] = useState([]);
-  const [loading, setLoading] = useState(false);
   const flights = useSelector((state: any) => state.flights);
   const { flight, isLoading } = flights;
 
-  console.log(filterd)
 
   useEffect(() => {
     dispatch(getFlights());
   }, [dispatch]);
+  
   useEffect(() => {
     setSearched(flight);
   }, [flight]);
-  if (isLoading || loading) {
+
+  useEffect(() => {
+    setSearched(filterd);
+  }, [filterd]);
+  if (isLoading) {
     return <Loading></Loading>;
   }
 
   // search event
   const onSearch = (e: any): void => {
-    setLoading(true);
-    const filtered = flight.filter((searchedFlight: any) =>
+    const filtered = filterd.filter((searchedFlight: any) =>
       searchedFlight.rocket?.rocket_name.includes(e)
     );
+    setSearched([])
     setSearched(filtered);
-    setLoading(false);
   };
 
 
@@ -53,14 +55,16 @@ const Main: React.FC = () => {
         setFilterd(lastYears);
       }
        else if (e === "lastMonth") {
-        console.log("last month");
-
         for (const unix of flight) {
           const lastLaunchedDate = unix.launch_date_local.split("T")[0];
-          const lastLaunchedTime = unix.launch_date_local.split("T")[1];
-          console.log(lastLaunchedDate)
+          const makeDate = new Date(lastLaunchedDate)
+          const prev = new Date(makeDate.getFullYear(), makeDate.getMonth()-1, makeDate.getDate());
+          const prevDate:any = prev.toLocaleDateString().split("/");
+          const filterLastMonths = flight.filter((filterLastMonth: any) => new Date(filterLastMonth.launch_date_local).toLocaleDateString().split("/")[0]+1 === prevDate[0] && new Date(filterLastMonth.launch_date_local).toLocaleDateString().split("/")[2] === prevDate[2])
+          
+
+          setFilterd(filterLastMonths)
         }
-        setFilterd(flight);
       }
        else if (e === "lastWeek") {
         console.log("last week");
