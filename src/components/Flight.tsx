@@ -40,12 +40,13 @@ const Flight = ({ flight }: { flight: flightType }) => {
             cover={<img alt="example" src={links.mission_patch} />}
           >
             <h2 style={{ margin: "0" }}>Mission name: {mission_name}</h2>
-            <h3>Rocket name: {rocket.rocket_name}</h3>
+            <h3 style={{margin:0}}><strong>Rocket name:</strong> {rocket.rocket_name}</h3>
             <p style={{ margin: "0" }}>
-              Launch local date: {launch_date_local}
+              <strong>Launch date:</strong> {launch_date_local.split("T")[0]}
             </p>
-            <p>Launching: {launch_success ? "Success" : "Failure"}</p>
-            <p>Is Upcoming: {upcoming ? "Yeas" : "No"}</p>
+            <p style={{margin:'0'}}><strong>Details:</strong> {details ? details : "Details not available"}</p>
+            <p><strong>Launching:</strong> {launch_success ? "Success" : "Failure"}</p>
+            <p><strong>Is Upcoming:</strong> {upcoming ? "Yeas" : "No"}</p>
           </Card>
         </Col>
       ) : (
