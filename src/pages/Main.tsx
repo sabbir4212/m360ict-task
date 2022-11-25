@@ -13,11 +13,10 @@ const Main: React.FC = () => {
   const flights = useSelector((state: any) => state.flights);
   const { flight, isLoading } = flights;
 
-
   useEffect(() => {
     dispatch(getFlights());
   }, [dispatch]);
-  
+
   useEffect(() => {
     setSearched(flight);
   }, [flight]);
@@ -34,10 +33,9 @@ const Main: React.FC = () => {
     const filtered = filterd.filter((searchedFlight: any) =>
       searchedFlight.rocket?.rocket_name.includes(e)
     );
-    setSearched([])
+    setSearched([]);
     setSearched(filtered);
   };
-
 
   // sort by date
   const sortByDate = (e: any) => {
@@ -45,30 +43,69 @@ const Main: React.FC = () => {
       if (e === "All") {
         console.log("all");
         setFilterd(flight);
-      }
-       else if (e === "lastYear") {
+      } else if (e === "lastYear") {
         const lastYearDate = flight.slice(-1)[0].launch_year;
         const lastYears = flight.filter(
           (ltyr: any) => parseInt(ltyr.launch_year) === parseInt(lastYearDate)
         );
         console.log("last year", lastYears);
         setFilterd(lastYears);
-      }
-       else if (e === "lastMonth") {
+      } else if (e === "lastMonth") {
         for (const unix of flight) {
           const lastLaunchedDate = unix.launch_date_local.split("T")[0];
-          const makeDate = new Date(lastLaunchedDate)
-          const prev = new Date(makeDate.getFullYear(), makeDate.getMonth()-1, makeDate.getDate());
-          const prevDate:any = prev.toLocaleDateString().split("/");
-          const filterLastMonths = flight.filter((filterLastMonth: any) => new Date(filterLastMonth.launch_date_local).toLocaleDateString().split("/")[0]+1 === prevDate[0] && new Date(filterLastMonth.launch_date_local).toLocaleDateString().split("/")[2] === prevDate[2])
-          
+          const makeDate = new Date(lastLaunchedDate);
+          const prev = new Date(
+            makeDate.getFullYear(),
+            makeDate.getMonth() - 1,
+            makeDate.getDate()
+          );
+          const prevDate: any = prev.toLocaleDateString().split("/");
+          const filterLastMonths = flight.filter(
+            (filterLastMonth: any) =>
+              new Date(filterLastMonth.launch_date_local)
+                .toLocaleDateString()
+                .split("/")[0] +
+                1 ===
+                prevDate[0] &&
+              new Date(filterLastMonth.launch_date_local)
+                .toLocaleDateString()
+                .split("/")[2] === prevDate[2]
+          );
 
-          setFilterd(filterLastMonths)
+          setFilterd(filterLastMonths);
         }
-      }
-       else if (e === "lastWeek") {
+      } else if (e === "lastWeek") {
         console.log("last week");
-        setFilterd(flight);
+
+        for (const unix of flight) {
+          const lastLaunchedDate = unix.launch_date_local.split("T")[0];
+          const makeDate = new Date(lastLaunchedDate);
+          const prev = new Date(
+            makeDate.getFullYear(),
+            makeDate.getMonth(),
+            makeDate.getDate() - 7
+          );
+          const prevDate: any = prev.toLocaleDateString().split("/");
+          const filterLastWeeks = flight.filter(
+            (filterLastWeek: any) =>
+              new Date(filterLastWeek.launch_date_local)
+                .toLocaleDateString()
+                .split("/")[1] +
+                7 ===
+                prevDate[1] &&
+              new Date(filterLastWeek.launch_date_local)
+                .toLocaleDateString()
+                .split("/")[2] === prevDate[2] &&
+              new Date(filterLastWeek.launch_date_local)
+                .toLocaleDateString()
+                .split("/")[0] === prevDate[0]
+          );
+          console.log(filterLastWeeks);
+
+          setFilterd(filterLastWeeks);
+        }
+
+        // setFilterd(flight);
       }
     }
   };
