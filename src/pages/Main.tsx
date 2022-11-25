@@ -104,13 +104,16 @@ const Main: React.FC = () => {
   const sortByLaunchingStatus = (e:string):void => {
     if(e){
       if (e === "All") {
+        console.log(flight)
         setFilterd(flight);
       }
       else if(e === "success"){
-        console.log('success')
+        const launchSuccess = flight.filter((success:any) => success.launch_success === true);
+        setFilterd(launchSuccess)
       }
       else if(e === 'fail'){
-        console.log('fail')
+        const launchingFail = flight.filter((fail:any) => fail.launch_success === false);
+        setFilterd(launchingFail)
       }
     }
   }
