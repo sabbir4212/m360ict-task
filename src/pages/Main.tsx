@@ -10,6 +10,7 @@ const Main: React.FC = () => {
   const dispatch = useDispatch();
   const [searched, setSearched] = useState([]);
   const [filterd, setFilterd] = useState([]);
+  const [loading, setLoading] = useState(false);
   const flights = useSelector((state: any) => state.flights);
   const { flight, isLoading } = flights;
 
@@ -18,13 +19,18 @@ const Main: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
+    setLoading(true);
     setSearched(flight);
+    setLoading(false);
   }, [flight]);
 
   useEffect(() => {
+    setLoading(true);
     setSearched(filterd);
+    setLoading(false);
   }, [filterd]);
-  if (isLoading) {
+
+  if (isLoading || loading) {
     return <Loading></Loading>;
   }
 
@@ -33,7 +39,6 @@ const Main: React.FC = () => {
     const filtered = filterd.filter((searchedFlight: any) =>
       searchedFlight.rocket?.rocket_name.includes(e)
     );
-    setSearched([]);
     setSearched(filtered);
   };
 
@@ -41,16 +46,19 @@ const Main: React.FC = () => {
   const sortByDate = (e: any) => {
     if (e) {
       if (e === "All") {
-        console.log("all");
+        setLoading(true);
         setFilterd(flight);
+        setLoading(false);
       } else if (e === "lastYear") {
+        setLoading(true);
         const lastYearDate = flight.slice(-1)[0].launch_year;
         const lastYears = flight.filter(
           (ltyr: any) => parseInt(ltyr.launch_year) === parseInt(lastYearDate)
         );
-        console.log("last year", lastYears);
         setFilterd(lastYears);
+        setLoading(false);
       } else if (e === "lastMonth") {
+        setLoading(true);
         for (const unix of flight) {
           const lastLaunchedDate = unix.launch_date_local.split("T")[0];
           const makeDate = new Date(lastLaunchedDate);
@@ -73,9 +81,10 @@ const Main: React.FC = () => {
           );
 
           setFilterd(filterLastMonths);
+          setLoading(false);
         }
       } else if (e === "lastWeek") {
-        console.log("last week");
+        setLoading(true);
 
         for (const unix of flight) {
           const lastLaunchedDate = unix.launch_date_local.split("T")[0];
@@ -100,12 +109,9 @@ const Main: React.FC = () => {
                 .toLocaleDateString()
                 .split("/")[0] === prevDate[0]
           );
-          console.log(filterLastWeeks);
-
           setFilterd(filterLastWeeks);
         }
-
-        // setFilterd(flight);
+        setLoading(false);
       }
     }
   };
@@ -153,9 +159,13 @@ const Main: React.FC = () => {
         </Row>
       </div>
       <Row className="ant-row" justify={"space-between"}>
-        {searched.map((flight: any) => (
-          <Flight key={flight.launch_date_local} flight={flight}></Flight>
-        ))}
+        {searched.length < 1 ? (
+          <h1>No Data Found</h1>
+        ) : (
+          searched.map((flight: any) => (
+            <Flight key={flight.launch_date_local} flight={flight}></Flight>
+          ))
+        )}
       </Row>
     </div>
   );
