@@ -10,7 +10,8 @@ import moment from "moment";
 const Main: React.FC = () => {
   const dispatch = useDispatch();
   const [searched, setSearched] = useState([]);
-  const [filterd, setFilterd] = useState([])
+  const [filterd, setFilterd] = useState([]);
+  const [loading, setLoading] = useState(false)
   const flights = useSelector((state: any) => state.flights);
   const { flight, isLoading } = flights;
 
@@ -20,30 +21,57 @@ const Main: React.FC = () => {
   useEffect(() => {
     setSearched(flight);
   }, [flight]);
-  if (isLoading) {
+  if (isLoading|| loading) {
     return <Loading></Loading>;
   }
 
+  // search event
   const onSearch = (e: any): void => {
-    console.log(e);
-    const today = new Date();
-    
+    setLoading(true)
     const filtered = flight.filter((searchedFlight: any) =>
-    searchedFlight.rocket?.rocket_name.includes(e)
+      searchedFlight.rocket?.rocket_name.includes(e)
     );
-    // const dateSorted = flight.filter((dateSort:any) => dateSort.launch_date_local.getTime() <= nowDate.getTime());
     setSearched(filtered);
-
+    setLoading(false)
   };
+
+  // sort by date
+  const sortByDate = (e: any) => {
+    if (e) {
+      if (e === "All") {
+        console.log("all");
+        const startDate = new Date("2006-03-25");
+        const endDate = new Date("2020-12-13");
+        const lastYear = flight.filter((flight: any) => flight.launch_date_local === endDate);
+        console.log(lastYear);
+        // for (const fl of flight) {
+        //   const local_date = fl.launch_date_local;
+        //   console.log(parseFloat(local_date));
+        // }
+
+        setFilterd(flight);
+      } else if (e === "lastYear") {
+        console.log("last year");
+        setFilterd(flight);
+      } else if (e === "lastMonth") {
+        console.log("last month");
+        setFilterd(flight);
+      } else if (e === "lastWeek") {
+        console.log("last week");
+        setFilterd(flight);
+      }
+    }
+  };
+  console.log('current mongths', new Date().getMonth())
 
   return (
     <div>
       <div
         className=""
-        style={{ margin: "0 auto", padding: "20px 0", width: 1200 }}
+        style={{ margin: "0 auto", padding: "20px" }}
       >
         <Row justify="space-between">
-          <Col span={8}>
+          <Col >
             <Space direction="vertical">
               <Search
                 placeholder="Search by rocket name"
@@ -53,32 +81,33 @@ const Main: React.FC = () => {
               />
             </Space>
           </Col>
-          <Col span={8}>
+          <Col >
             <Select
               defaultValue="All"
               style={{ width: 300 }}
               allowClear
+              onChange={sortByDate}
               options={[
                 {
                   value: "All",
                   label: "All",
                 },
                 {
-                  value: "Last Week",
+                  value: "lastWeek",
                   label: "Last Week",
                 },
                 {
-                  value: "Last Month",
+                  value: "lastMonth",
                   label: "Last Month",
                 },
                 {
-                  value: "Last Year",
+                  value: "lastYear",
                   label: "Last Year",
                 },
               ]}
             />
           </Col>
-          <Col span={8}>
+          {/* <Col span={8}>
             <Select
               defaultValue="10"
               style={{ width: 200 }}
@@ -102,14 +131,14 @@ const Main: React.FC = () => {
                 },
               ]}
             />
-          </Col>
+          </Col> */}
         </Row>
       </div>
-      <div style={{ display: "grid" }}>
+      <Row className="ant-row" justify={'space-between'}>
         {searched.map((flight: any) => (
-          <Flight key={flight.flight_number} flight={flight}></Flight>
+          <Flight key={flight.launch_date_local} flight={flight}></Flight>
         ))}
-      </div>
+      </Row>
     </div>
   );
 };

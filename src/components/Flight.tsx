@@ -31,9 +31,9 @@ const Flight = ({ flight }: { flight: flightType }) => {
   } = flight;
 
   return (
-    <div>
+    <Col xs={24} sm={24} md={12} lg={8} xl={8} style={{ padding: "10px 20px" }}>
       {flight ? (
-        <Col style={{ padding: "0 20px" }}>
+        <Col>
           <Card
             style={{ marginTop: "10px" }}
             hoverable
@@ -53,7 +53,7 @@ const Flight = ({ flight }: { flight: flightType }) => {
           Sorry cannot find Rocket by this name
         </h1>
       )}
-    </div>
+    </Col>
   );
 };
 
