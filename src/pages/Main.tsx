@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Col, Row, Select, Space } from "antd";
 import Search from "antd/es/input/Search";
 import React, { useEffect, useState } from "react";
@@ -13,8 +14,6 @@ const Main: React.FC = () => {
   const [filterd, setFilterd] = useState([]);
   const flights = useSelector((state: any) => state.flights);
   const { flight, isLoading } = flights;
-  const filtereds = useSelector((state: any) => state.filteredFlight);
-  const { filtered, FilLoading } = filtereds;
 
   useEffect(() => {
     dispatch(getFlights());
@@ -118,6 +117,7 @@ const Main: React.FC = () => {
           return dates(date, 7);
         };
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const lastWeekDate = lastWeek(); // last weeks all dates array
 
         const array1: any = []; // all flight launching date array
