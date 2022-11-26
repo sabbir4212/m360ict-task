@@ -13,13 +13,17 @@ const Main: React.FC = () => {
   const [filterd, setFilterd] = useState([]);
   const flights = useSelector((state: any) => state.flights);
   const { flight, isLoading } = flights;
+  const filtereds = useSelector((state: any) => state.filteredFlight);
+    const { filtered, FilLoading } = filtereds;
 
   useEffect(() => {
     dispatch(getFlights());
   }, [dispatch]);
+
   useEffect(() => {
     dispatch(getFilteredFile(searched));
   }, [searched]);
+
   useEffect(() => {
     setSearched(flight);
   }, [flight]);
@@ -34,10 +38,10 @@ const Main: React.FC = () => {
 
   // search event
   const onSearch = (e: string): void => {
-    const filtered = filterd.filter((searchedFlight: any) =>
+    const filteredSearch = flight.filter((searchedFlight: any) =>
       searchedFlight.rocket?.rocket_name.includes(e)
     );
-    setSearched(filtered);
+    setSearched(filteredSearch);
   };
 
   // sort by date
