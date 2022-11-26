@@ -3,7 +3,7 @@ import React from "react";
 import { flightType } from "../utils/type/flightTypes";
 
 const Flight = ({ flight }: { flight: flightType }) => {
-  console.log(flight);
+  // console.log(flight);
   const {
     details,
     launch_date_local,

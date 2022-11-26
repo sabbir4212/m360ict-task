@@ -5,6 +5,7 @@ import Loading from "../components/Loading";
 import Flight from "../components/Flight";
 import Search from "antd/es/input/Search";
 import { Col, Row, Select, Space } from "antd";
+import { getFilteredFile } from "../lib/slice/filteredSlice";
 
 const Main: React.FC = () => {
   const dispatch = useDispatch();
@@ -13,10 +14,16 @@ const Main: React.FC = () => {
   const flights = useSelector((state: any) => state.flights);
   const { flight, isLoading } = flights;
 
+  const filtereds = useSelector((state:any) => state.filteredFlight);
+  const {filtered, FilLoading} = filtereds
+  // console.log(filtered)
+
   useEffect(() => {
     dispatch(getFlights());
   }, [dispatch]);
-
+useEffect(() => {
+  dispatch(getFilteredFile(searched))
+},[searched])
   useEffect(() => {
     setSearched(flight);
   }, [flight]);
@@ -28,6 +35,11 @@ const Main: React.FC = () => {
   if (isLoading) {
     return <Loading></Loading>;
   }
+  if(FilLoading){
+    return <Loading></Loading>
+  }
+
+
 
   // search event
   const onSearch = (e: string): void => {
@@ -139,7 +151,7 @@ const Main: React.FC = () => {
     <div>
       <div className="" style={{ margin: "0 auto", padding: "20px" }}>
         <Row justify="space-between">
-          <Col>
+          <Col style={{marginBottom:"5px", margin:'0 auto'}}>
         <p style={{margin:'0'}}>Search by rocket name</p>
             <Space direction="vertical">
               <Search
@@ -150,7 +162,7 @@ const Main: React.FC = () => {
               />
             </Space>
           </Col>
-          <Col>
+          <Col style={{marginBottom:"5px", margin:'0 auto'}}>
           <p style={{margin:'0'}}>Select launching dates</p>
             <Select
               defaultValue="All"
@@ -179,7 +191,7 @@ const Main: React.FC = () => {
           </Col>
 
           {/* launching status select */}
-          <Col>
+          <Col style={{marginBottom:"5px", margin:'0 auto'}}>
           <p style={{margin:'0'}}>Select launching status</p>
             <Select
               defaultValue="All"
@@ -204,7 +216,7 @@ const Main: React.FC = () => {
           </Col>
           
           {/* upcoming select */}
-          <Col>
+          <Col style={{marginBottom:"5px", margin:'0 auto'}}>
           <p style={{margin:'0'}}>Select is upcoming</p>
             <Select
               defaultValue="All"
@@ -230,10 +242,10 @@ const Main: React.FC = () => {
         </Row>
       </div>
       <Row className="ant-row" justify={"space-between"}>
-        {searched.length < 1 ? (
+        {filtered.length < 1 ? (
           <h1>No Data Found</h1>
         ) : (
-          searched.map((flight: any) => (
+          filtered.map((flight: any) => (
             <Flight key={flight.launch_date_local} flight={flight}></Flight>
           ))
         )}
