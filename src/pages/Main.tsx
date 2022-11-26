@@ -1,11 +1,11 @@
+import { Col, Row, Select, Space } from "antd";
+import Search from "antd/es/input/Search";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getFlights } from "../lib/slice/flightSlice";
-import Loading from "../components/Loading";
-import Search from "antd/es/input/Search";
-import { Col, Row, Select, Space } from "antd";
-import { getFilteredFile } from "../lib/slice/filteredSlice";
 import Flights from "../components/Flights";
+import Loading from "../components/Loading";
+import { getFilteredFile } from "../lib/slice/filteredSlice";
+import { getFlights } from "../lib/slice/flightSlice";
 
 const Main: React.FC = () => {
   const dispatch = useDispatch();
@@ -118,14 +118,12 @@ const Main: React.FC = () => {
           return dates(date, 7);
         };
 
-        const lastWeekDate = lastWeek();// last weeks all dates array
+        const lastWeekDate = lastWeek(); // last weeks all dates array
 
         const array1: any = []; // all flight launching date array
         for (const lastFlightSingleDate of flight) {
           array1.push(lastFlightSingleDate.launch_date_local.split("T")[0]);
         }
-        
-        
       }
     }
   };
