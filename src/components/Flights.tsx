@@ -7,7 +7,7 @@ const Flights = () => {
     const filtereds = useSelector((state: any) => state.filteredFlight);
     const { filtered, FilLoading } = filtereds;
     return (
-        <Row className="ant-row" justify={"space-between"}>
+        <Row className="ant-row">
         {filtered.length < 1 ? (
           <h1>No Data Found</h1>
         ) : (

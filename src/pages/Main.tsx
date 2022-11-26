@@ -14,7 +14,7 @@ const Main: React.FC = () => {
   const flights = useSelector((state: any) => state.flights);
   const { flight, isLoading } = flights;
   const filtereds = useSelector((state: any) => state.filteredFlight);
-    const { filtered, FilLoading } = filtereds;
+  const { filtered, FilLoading } = filtereds;
 
   useEffect(() => {
     dispatch(getFlights());
@@ -103,6 +103,29 @@ const Main: React.FC = () => {
           );
           setFilterd(filterLastWeeks);
         }
+
+        // for get last weeks dates
+        const dates = (startDate: any, num: any) =>
+          Array.from({ length: num }, (_, i) =>
+            new Date(startDate.getTime() + i * 60000 * 60 * 24)
+              .toISOString()
+              .slice(0, 10)
+          );
+
+        const lastWeek = () => {
+          const date = new Date();
+          date.setDate(date.getDate() - date.getDay() - 6);
+          return dates(date, 7);
+        };
+
+        const lastWeekDate = lastWeek();// last weeks all dates array
+
+        const array1: any = []; // all flight launching date array
+        for (const lastFlightSingleDate of flight) {
+          array1.push(lastFlightSingleDate.launch_date_local.split("T")[0]);
+        }
+        
+        
       }
     }
   };
