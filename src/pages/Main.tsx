@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getFlights } from "../lib/slice/flightSlice";
 import Loading from "../components/Loading";
-import Flight from "../components/Flight";
 import Search from "antd/es/input/Search";
 import { Col, Row, Select, Space } from "antd";
 import { getFilteredFile } from "../lib/slice/filteredSlice";
+import Flights from "../components/Flights";
 
 const Main: React.FC = () => {
   const dispatch = useDispatch();
@@ -14,16 +14,12 @@ const Main: React.FC = () => {
   const flights = useSelector((state: any) => state.flights);
   const { flight, isLoading } = flights;
 
-  const filtereds = useSelector((state:any) => state.filteredFlight);
-  const {filtered, FilLoading} = filtereds
-  // console.log(filtered)
-
   useEffect(() => {
     dispatch(getFlights());
   }, [dispatch]);
-useEffect(() => {
-  dispatch(getFilteredFile(searched))
-},[searched])
+  useEffect(() => {
+    dispatch(getFilteredFile(searched));
+  }, [searched]);
   useEffect(() => {
     setSearched(flight);
   }, [flight]);
@@ -35,11 +31,6 @@ useEffect(() => {
   if (isLoading) {
     return <Loading></Loading>;
   }
-  if(FilLoading){
-    return <Loading></Loading>
-  }
-
-
 
   // search event
   const onSearch = (e: string): void => {
@@ -113,46 +104,50 @@ useEffect(() => {
   };
 
   // sort by launching status
-  const sortByLaunchingStatus = (e:string):void => {
-    if(e){
+  const sortByLaunchingStatus = (e: string): void => {
+    if (e) {
       if (e === "All") {
-        console.log(flight)
+        console.log(flight);
         setFilterd(flight);
-      }
-      else if(e === "success"){
-        const launchSuccess = flight.filter((success:any) => success.launch_success === true);
-        setFilterd(launchSuccess)
-      }
-      else if(e === 'fail'){
-        const launchingFail = flight.filter((fail:any) => fail.launch_success === false);
-        setFilterd(launchingFail)
+      } else if (e === "success") {
+        const launchSuccess = flight.filter(
+          (success: any) => success.launch_success === true
+        );
+        setFilterd(launchSuccess);
+      } else if (e === "fail") {
+        const launchingFail = flight.filter(
+          (fail: any) => fail.launch_success === false
+        );
+        setFilterd(launchingFail);
       }
     }
-  }
+  };
 
-  // sort by is upcoming 
-  const sortByUpcoming = (e:string):void => {
-    if(e){
+  // sort by is upcoming
+  const sortByUpcoming = (e: string): void => {
+    if (e) {
       if (e === "All") {
         setFilterd(flight);
-      }
-      else if(e === 'upcomimg'){
-        const filterUpcoming = flight.filter((upcoming:any) => upcoming.upcoming === true);
-        setFilterd(filterUpcoming)
-      }
-      else if(e === 'notUpcoming'){
-        const filterNotUpcomint = flight.filter((notUpcomint:any) => notUpcomint.upcoming === false);
-        setFilterd(filterNotUpcomint)
+      } else if (e === "upcomimg") {
+        const filterUpcoming = flight.filter(
+          (upcoming: any) => upcoming.upcoming === true
+        );
+        setFilterd(filterUpcoming);
+      } else if (e === "notUpcoming") {
+        const filterNotUpcomint = flight.filter(
+          (notUpcomint: any) => notUpcomint.upcoming === false
+        );
+        setFilterd(filterNotUpcomint);
       }
     }
-  }
+  };
 
   return (
     <div>
       <div className="" style={{ margin: "0 auto", padding: "20px" }}>
         <Row justify="space-between">
-          <Col style={{marginBottom:"5px", margin:'0 auto'}}>
-        <p style={{margin:'0'}}>Search by rocket name</p>
+          <Col style={{ marginBottom: "5px", margin: "0 auto" }}>
+            <p style={{ margin: "0" }}>Search by rocket name</p>
             <Space direction="vertical">
               <Search
                 placeholder="Search by rocket name"
@@ -162,8 +157,8 @@ useEffect(() => {
               />
             </Space>
           </Col>
-          <Col style={{marginBottom:"5px", margin:'0 auto'}}>
-          <p style={{margin:'0'}}>Select launching dates</p>
+          <Col style={{ marginBottom: "5px", margin: "0 auto" }}>
+            <p style={{ margin: "0" }}>Select launching dates</p>
             <Select
               defaultValue="All"
               style={{ width: 300 }}
@@ -191,8 +186,8 @@ useEffect(() => {
           </Col>
 
           {/* launching status select */}
-          <Col style={{marginBottom:"5px", margin:'0 auto'}}>
-          <p style={{margin:'0'}}>Select launching status</p>
+          <Col style={{ marginBottom: "5px", margin: "0 auto" }}>
+            <p style={{ margin: "0" }}>Select launching status</p>
             <Select
               defaultValue="All"
               style={{ width: 300 }}
@@ -210,14 +205,14 @@ useEffect(() => {
                 {
                   value: "fail",
                   label: "Launching fail",
-                }
+                },
               ]}
             />
           </Col>
-          
+
           {/* upcoming select */}
-          <Col style={{marginBottom:"5px", margin:'0 auto'}}>
-          <p style={{margin:'0'}}>Select is upcoming</p>
+          <Col style={{ marginBottom: "5px", margin: "0 auto" }}>
+            <p style={{ margin: "0" }}>Select is upcoming</p>
             <Select
               defaultValue="All"
               style={{ width: 300 }}
@@ -235,21 +230,13 @@ useEffect(() => {
                 {
                   value: "notUpcoming",
                   label: "Not Upcoming",
-                }
+                },
               ]}
             />
           </Col>
         </Row>
       </div>
-      <Row className="ant-row" justify={"space-between"}>
-        {filtered.length < 1 ? (
-          <h1>No Data Found</h1>
-        ) : (
-          filtered.map((flight: any) => (
-            <Flight key={flight.launch_date_local} flight={flight}></Flight>
-          ))
-        )}
-      </Row>
+      <Flights></Flights>
     </div>
   );
 };
